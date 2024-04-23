@@ -1,0 +1,21 @@
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+
+//TODO http:localhost:3000 una vez que ingresa al localhost
+//tiene un decorador es una función que se encarga de añadir anotaciones
+//metadatos o cambiar el comportamiento de una clase, propiedad o metodos
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get('users')
+  getUsers(): string[]{
+    //el controlador llama un servicio
+    return this.appService.getUsers();
+  }
+
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
+  }
+}
