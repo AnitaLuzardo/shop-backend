@@ -9,10 +9,9 @@ async function bootstrap() {
     .setTitle('My API documentation')
     .setDescription('Shopping cart study test')
     .setVersion('1.0')
-    .addTag('products')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('web/api', app, document);
 
   await app.listen(3000);
 }
