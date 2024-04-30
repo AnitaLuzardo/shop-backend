@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Product } from './entities/product.entity';
+import { ProductsService } from './products.service';
 
 
 @ApiTags('products')
@@ -19,8 +20,15 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  async findAll(): Promise<Product[] | string> {
+    try {
+      return await this.productsService.findAll();
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return 'No tenemos productos en estos momentos';
+      }
+      throw error;
+    }
   }
 
   @Get(':id')
