@@ -6,6 +6,10 @@ import { ShoppingscartsModule } from './shoppingscarts/shoppingscarts.module';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { DiscountsModule } from './discounts/discounts.module';
+import { ImagesModule } from './images/images.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
 
 @Module({
   imports: [
@@ -22,7 +26,12 @@ import { DiscountsModule } from './discounts/discounts.module';
     ProductsModule, 
     ShoppingscartsModule, 
     UsersModule, 
-    DiscountsModule
+    DiscountsModule, 
+    ImagesModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..','public', 'images'),
+      serveRoot: '/public/images',
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

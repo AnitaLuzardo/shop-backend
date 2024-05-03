@@ -16,7 +16,9 @@ export class ProductsController {
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
     //acá es donde se conectan las consultas a la base de datos
-    return this.productsService.create(createProductDto);
+    //Aquí viene todo enviado por POST Body
+    this.productsService.create(createProductDto);
+    return console.log('Hola soy tu nuevo producto')
   }
 
   @Get()

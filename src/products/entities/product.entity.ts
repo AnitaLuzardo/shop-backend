@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Image } from "src/images/entities/image.entity";
 
 @Entity({name: 'products'})
 export class Product {
@@ -14,6 +15,6 @@ export class Product {
 	@Column()
 	price: number
 
-	@Column()
-	img: string
+	@OneToMany(() => Image, image => image.product)
+    images: Image[];
 }

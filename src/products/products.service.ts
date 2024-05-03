@@ -10,19 +10,25 @@ export class ProductsService {
 
   constructor(
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    private readonly productRepo: Repository<Product>,
   ){}
   
   async findAll(): Promise<Product[] | string> {
-    const products = await this.productRepository.find();
+    const products = await this.productRepo.find();
     if (products.length === 0) {
       throw new NotFoundException('No tenemos productos en estos momentos');
     }
     return products;
   } 
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  async create(createProductDto: CreateProductDto) {
+    const newProduct = this.productRepo.create(createProductDto)
+
+    const createdProduct = await this.productRepo.save(newProduct);
+    console.log('Producto creado satisfactoriamente:', createdProduct);
+    
+    // return 'Creaste un nuevo producto';
+    return createdProduct
   }
 
   findOne(id: number) {
