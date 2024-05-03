@@ -15,6 +15,6 @@ export class Product {
 	@Column()
 	price: number
 
-	@OneToMany(() => Image, image => image.product)
+	@OneToMany(() => Image, image => image.product, { cascade: true })
     images: Image[];
 }

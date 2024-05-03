@@ -11,4 +11,8 @@ export class Image {
 
   @ManyToOne(() => Product, product => product.images)
   product: Product;
+  //Acá se especifica el tipo de entidad () => Product
+  // product => product.images: Este argumento especifica 
+  // cómo se puede acceder a la propiedad en la entidad Product que almacena 
+  // todas las imágenes asociadas a ese producto.
 }

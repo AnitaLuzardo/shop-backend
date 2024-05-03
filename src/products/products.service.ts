@@ -24,11 +24,11 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto) {
     const newProduct = this.productRepo.create(createProductDto)
 
-    const createdProduct = await this.productRepo.save(newProduct);
-    console.log('Producto creado satisfactoriamente:', createdProduct);
+    // const createdProduct = await 
+    // console.log('Producto creado satisfactoriamente:', createdProduct);
     
     // return 'Creaste un nuevo producto';
-    return createdProduct
+    return this.productRepo.save(newProduct);
   }
 
   findOne(id: number) {
