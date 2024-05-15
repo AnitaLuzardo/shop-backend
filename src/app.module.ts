@@ -9,6 +9,7 @@ import { DiscountsModule } from './discounts/discounts.module';
 import { ImagesModule } from './images/images.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -31,7 +32,8 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..','public', 'images'),
       serveRoot: '/public/images',
-    })
+    }),
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

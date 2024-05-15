@@ -24,22 +24,48 @@ export class ProductsService {
   async create(createProductDto: CreateProductDto) {
     const newProduct = this.productRepo.create(createProductDto)
 
-    // const createdProduct = await 
-    // console.log('Producto creado satisfactoriamente:', createdProduct);
-    
-    // return 'Creaste un nuevo producto';
     return this.productRepo.save(newProduct);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+
+    const product = await this.productRepo.findOne({
+      where: { id },
+      relations: ['images']
+    });
+    if (!product) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+    return product;
+
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const existingProduct = await this.productRepo.findOne({ where: {id} });
+    
+    if (!existingProduct) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+
+    existingProduct.name = updateProductDto.name;
+    existingProduct.description = updateProductDto.description;
+    existingProduct.price = updateProductDto.price;
+    existingProduct.images = updateProductDto.images;
+
+    return this.productRepo.save(existingProduct);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    const product = await this.productRepo.findOne({ where: {id} })
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    const productId = product.id;
+    
+    await this.productRepo.remove(product);
+
+    return `Product has been removed "${product.name}" (ID: ${productId})`
   }
 }

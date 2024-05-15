@@ -27,24 +27,46 @@ export class ProductsController {
       return await this.productsService.findAll();
     } catch (error) {
       if (error instanceof NotFoundException) {
-        return 'No tenemos productos en estos momentos';
+        return 'We do not have products at this time';
       }
       throw error;
     }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      return this.productsService.findOne(+id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return {
+            error: 'Product not found',
+            message: 'This product does not exist in our store'
+        };
+      }
+      throw error;
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+  async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    try {
+      return await this.productsService.update(+id, updateProductDto);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return 'This product does not exist in our store';
+      }
+      throw error;
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    try{
+      return this.productsService.remove(+id);
+    }catch( error ) {
+      return { message: 'Error deleting product', error }
+    }
+    
   }
 }
