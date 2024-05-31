@@ -6,6 +6,8 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
+type UserWithoutPassword = Omit<User, 'pwd'>;
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -13,14 +15,16 @@ export class UsersService {
     private readonly userRepo: Repository<User>,
   ){}
 
-  async findAll(): Promise<User[] | string >  {
+  async findAll(): Promise<UserWithoutPassword[] | string> {
     const users = await this.userRepo.find();
 
     if (users.length === 0) {
       throw new NotFoundException('There are no registered users');
     }
 
-    return users;
+    const usersWithoutPassword = users.map(({ pwd, ...user }) => user);
+
+    return usersWithoutPassword;
   }
 
   async create(createUserDto: CreateUserDto) {
@@ -45,7 +49,12 @@ export class UsersService {
       pwd: hashedPassword // Guarda la contraseña encriptada
     });
 
-    return this.userRepo.save(newUser);
+    const savedUser = await this.userRepo.save(newUser);
+    
+    // Excluir el campo pwd del usuario devuelto
+    const { pwd: _, ...userWithoutPassword } = savedUser;
+
+    return userWithoutPassword;
   }
   
   async findOneByEmail(email: string): Promise<User | undefined> {

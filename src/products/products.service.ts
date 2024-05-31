@@ -14,7 +14,7 @@ export class ProductsService {
   ){}
   
   async findAll(): Promise<Product[] | string> {
-    const products = await this.productRepo.find();
+    const products = await this.productRepo.find({ relations: ['images'] });
     if (products.length === 0) {
       throw new NotFoundException('No tenemos productos en estos momentos');
     }

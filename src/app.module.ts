@@ -10,10 +10,14 @@ import { ImagesModule } from './images/images.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // Esto hace que ConfigModule esté disponible globalmente
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

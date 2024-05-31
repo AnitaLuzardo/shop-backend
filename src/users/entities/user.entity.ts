@@ -23,5 +23,4 @@ export class User {
 
 	@OneToMany(() => ShoppingCart, (shoppingcart) => shoppingcart.user)
 	shoppingscarts: ShoppingCart[]
-
 }
