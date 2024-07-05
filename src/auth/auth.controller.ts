@@ -13,8 +13,8 @@ export class AuthController {
 
   @Post('register')
   registerUser(@Body() userObject: RegisterAuthDto) {
-    return this.authService.register(userObject);
-    // console.log({ body: userObject })
+    return this.authService.singUp(userObject);
+    // console.log({ body: userObject }) RECUERDA QUE CAMBIASTE REGISTER POR SINGUP
   }
 
   @HttpCode(HttpStatus.OK)

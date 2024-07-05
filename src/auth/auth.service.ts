@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async register(userObject: RegisterAuthDto) {
+  async singUp(userObject: RegisterAuthDto) { //ACA TAMBIEN REGISTER POR SINGUP
     const { email } = userObject;
     
     // Verificar si el usuario ya existe
@@ -45,7 +45,6 @@ export class AuthService {
     const user = await this.usersService.findOneByEmail(email);
     if (user) {
       console.log('User found:', user);
-      console.log('Password', pwd)
       const isPasswordValid = await bcrypt.compare(pwd, user.pwd);
       console.log('Password valid:', isPasswordValid);
       if (isPasswordValid) {

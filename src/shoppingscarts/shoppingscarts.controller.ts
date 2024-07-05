@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Request, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ShoppingscartsService } from './shoppingscarts.service';
 import { CreateShoppingscartDto } from './dto/create-shoppingscart.dto';
 import { UpdateShoppingscartDto } from './dto/update-shoppingscart.dto';
+import { jwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('shoppings/carts')
@@ -9,9 +10,17 @@ import { ApiTags } from '@nestjs/swagger';
 export class ShoppingscartsController {
   constructor(private readonly shoppingscartsService: ShoppingscartsService) {}
 
+  @UseGuards(jwtAuthGuard)
   @Post()
-  create(@Body() createShoppingscartDto: CreateShoppingscartDto) {
-    return this.shoppingscartsService.create(createShoppingscartDto);
+  create(@Request() req, @Body() createShoppingscartDto: CreateShoppingscartDto) {
+    console.log(req.user);
+
+    const userId = req.user.userId; // Obtener el userId del token JWT
+    
+    return this.shoppingscartsService.create({
+      ...createShoppingscartDto,
+      userId, // Añadir el userId al DTO
+    });
   }
 
   @Get()

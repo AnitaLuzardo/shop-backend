@@ -24,4 +24,5 @@ export class ShoppingCart {
 
   @ManyToOne(() => User, user => user.shoppingscarts)
   user: User
+  shoppingCart: Product;
 }

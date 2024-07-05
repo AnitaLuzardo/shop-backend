@@ -1,11 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateShoppingscartDto } from './dto/create-shoppingscart.dto';
 import { UpdateShoppingscartDto } from './dto/update-shoppingscart.dto';
+import { ShoppingCart } from './entities/shoppingscart.entity';
+import { In, Repository } from 'typeorm';
+import { Product } from 'src/products/entities/product.entity';
+import { Discount } from 'src/discounts/entities/discount.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ShoppingscartsService {
-  create(createShoppingscartDto: CreateShoppingscartDto) {
-    return 'This action adds a new shoppingscart';
+  constructor(
+    @InjectRepository(ShoppingCart)
+    private shoppingCartRepository: Repository<ShoppingCart>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Discount)
+    private discountRepository: Repository<Discount>,
+  ) {}
+
+  async create(createShoppingscartDto: CreateShoppingscartDto) {
+    const { asset, date_created, products, discounts, userId } = createShoppingscartDto;
+
+    const shoppingCart = new ShoppingCart();
+    shoppingCart.asset = asset;
+    shoppingCart.date_created = date_created;
+    shoppingCart.products = await this.productRepository.findBy({ id: In(products) }); // Obtener múltiples productos
+    shoppingCart.user = await this.userRepository.findOne({ where: { id: userId } }); // Buscar usuario por ID
+    
+    if (discounts) {
+      shoppingCart.discounts = await this.discountRepository.findBy({ id: In(discounts) });
+    } else {
+      shoppingCart.discounts = [];
+    }
+
+    return this.shoppingCartRepository.save(shoppingCart);
+    // return 'This action adds a new shoppingscart';
   }
 
   findAll() {

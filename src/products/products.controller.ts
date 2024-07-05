@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+  
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, UseGuards } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
-
+// import { jwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('products')
 @Controller('products') 
@@ -13,6 +14,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
    //Todo viene ordenado por su service (productsService)
+  // @UseGuards(jwtAuthGuard)
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
     //acá es donde se conectan las consultas a la base de datos
@@ -21,6 +23,7 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+  // @UseGuards(jwtAuthGuard)
   @Get()
   async findAll(): Promise<Product[] | string> {
     try {
@@ -48,6 +51,7 @@ export class ProductsController {
     }
   }
 
+  // @UseGuards(jwtAuthGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     try {

@@ -1,4 +1,5 @@
 import { IsNotEmpty, MinLength, MaxLength } from "class-validator";
+import { Exclude } from "class-transformer";
 export class CreateUserDto {
   @IsNotEmpty()
   name: string
