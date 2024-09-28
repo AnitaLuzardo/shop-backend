@@ -5,7 +5,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
-// import { jwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { jwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('products')
 @Controller('products') 
@@ -14,7 +14,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
    //Todo viene ordenado por su service (productsService)
-  // @UseGuards(jwtAuthGuard)
+  @UseGuards(jwtAuthGuard)
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
     //acá es donde se conectan las consultas a la base de datos
@@ -30,7 +30,7 @@ export class ProductsController {
       return await this.productsService.findAll();
     } catch (error) {
       if (error instanceof NotFoundException) {
-        return 'We do not have products at this time';
+        return [];
       }
       throw error;
     }
@@ -51,7 +51,7 @@ export class ProductsController {
     }
   }
 
-  // @UseGuards(jwtAuthGuard)
+  @UseGuards(jwtAuthGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     try {
@@ -66,11 +66,10 @@ export class ProductsController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    try{
+    try {
       return this.productsService.remove(+id);
-    }catch( error ) {
+    } catch (error) {
       return { message: 'Error deleting product', error }
     }
-    
   }
 }

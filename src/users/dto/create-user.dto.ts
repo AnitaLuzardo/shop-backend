@@ -13,6 +13,7 @@ export class CreateUserDto {
   @IsNotEmpty() //DECORADORES
   email: string
 
+  @Exclude()
   @MinLength(6)
   @MaxLength(12)
   pwd: string

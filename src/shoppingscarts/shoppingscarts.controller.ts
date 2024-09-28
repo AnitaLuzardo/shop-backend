@@ -28,9 +28,10 @@ export class ShoppingscartsController {
     return this.shoppingscartsService.findAll();
   }
 
+  @UseGuards(jwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.shoppingscartsService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.shoppingscartsService.findOne(id);
   }
 
   @Patch(':id')

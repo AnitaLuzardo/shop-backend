@@ -22,10 +22,10 @@ export class ShoppingscartsService {
   ) {}
 
   async create(createShoppingscartDto: CreateShoppingscartDto) {
-    const { asset, date_created, products, discounts, userId } = createShoppingscartDto;
+    const { date_created, products, discounts, userId } = createShoppingscartDto;
 
     const shoppingCart = new ShoppingCart();
-    shoppingCart.asset = asset;
+    // shoppingCart.asset = asset;
     shoppingCart.date_created = date_created;
     shoppingCart.products = await this.productRepository.findBy({ id: In(products) }); // Obtener múltiples productos
     shoppingCart.user = await this.userRepository.findOne({ where: { id: userId } }); // Buscar usuario por ID
@@ -44,10 +44,13 @@ export class ShoppingscartsService {
     return `This action returns all shoppingscarts`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shoppingscart`;
+  async findOne(id: number): Promise<ShoppingCart> {
+    return this.shoppingCartRepository.findOne({
+      where: { id },
+      relations: ['products', 'discounts', 'user'], // Cargar relaciones
+    });
   }
-
+  
   update(id: number, updateShoppingscartDto: UpdateShoppingscartDto) {
     return `This action updates a #${id} shoppingscart`;
   }

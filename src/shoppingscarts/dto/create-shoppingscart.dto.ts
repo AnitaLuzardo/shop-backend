@@ -2,8 +2,6 @@ import { IsBoolean, IsDate, IsArray, IsNumber, IsOptional }  from "class-validat
 import { Type } from 'class-transformer';
 
 export class CreateShoppingscartDto {
-  @IsBoolean()
-  asset: boolean;
 
   @IsDate()
   @Type(() => Date)

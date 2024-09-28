@@ -9,9 +9,6 @@ export class ShoppingCart {
   id: number;
 
   @Column()
-  asset: boolean
-
-  @Column()
   date_created: Date
 
   @ManyToMany(() => Product)
