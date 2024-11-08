@@ -14,7 +14,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
    //Todo viene ordenado por su service (productsService)
-  @UseGuards(jwtAuthGuard)
+  // @UseGuards(jwtAuthGuard)
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
     //acá es donde se conectan las consultas a la base de datos

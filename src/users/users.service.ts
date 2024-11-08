@@ -61,9 +61,17 @@ export class UsersService {
     return this.userRepo.findOne({ where: { email } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepo.findOneBy({ id }); // Busca al usuario por ID
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return user; // Devuelve el usuario encontrado
   }
+
+  // findOne(id: number) {
+  //   return `This action returns a #${id} user`;
+  // }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;

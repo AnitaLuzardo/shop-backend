@@ -1,35 +1,42 @@
-import { Controller, Get, Post, Body, Request, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Request, Patch, Param, Delete, UseGuards, BadRequestException } from '@nestjs/common';
 import { ShoppingscartsService } from './shoppingscarts.service';
 import { CreateShoppingscartDto } from './dto/create-shoppingscart.dto';
 import { UpdateShoppingscartDto } from './dto/update-shoppingscart.dto';
 import { jwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('shoppings/carts')
 @Controller('shoppings/carts')
 export class ShoppingscartsController {
   constructor(private readonly shoppingscartsService: ShoppingscartsService) {}
-
+  
+  @Post('addproducts')
   @UseGuards(jwtAuthGuard)
-  @Post()
-  create(@Request() req, @Body() createShoppingscartDto: CreateShoppingscartDto) {
-    console.log(req.user);
-
-    const userId = req.user.userId; // Obtener el userId del token JWT
+  save(@Request() req, @Body() createShoppingscartDto: CreateShoppingscartDto) {
+  
+    const userId = Number(req.user.id);
+    console.log('User ID', userId);
     
-    return this.shoppingscartsService.create({
-      ...createShoppingscartDto,
-      userId, // Añadir el userId al DTO
-    });
+    return this.shoppingscartsService.create(createShoppingscartDto, userId);
   }
-
-  @Get()
-  findAll() {
-    return this.shoppingscartsService.findAll();
-  }
-
+  
+  @Get('list')
   @UseGuards(jwtAuthGuard)
+  async findByUser(@Request() req ) {
+    console.log('User in Controller:', req.user)
+    const userId = Number(req.user.id);
+    console.log('User ID:', userId);
+
+    if (isNaN(userId)) {
+      throw new BadRequestException('Invalid user ID');
+    }
+  
+    return await this.shoppingscartsService.findByUserServ(userId);
+  }
+
   @Get(':id')
+  @UseGuards(jwtAuthGuard)
   findOne(@Param('id') id: number) {
     return this.shoppingscartsService.findOne(id);
   }

@@ -16,6 +16,6 @@ export class CreateShoppingscartDto {
   @IsOptional() // Hacer que discounts sea opcional
   discounts?: number[];
 
-  @IsNumber()
-  userId: number;
+  // @IsNumber()
+  // userId: number;
 }
