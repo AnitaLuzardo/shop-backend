@@ -68,58 +68,6 @@ export class ShoppingscartsService {
     };
   }
 
-
-  // async create(createShoppingscartDto: CreateShoppingscartDto, userId: number){
-  //   const { date_created, products, discounts } = createShoppingscartDto;
-
-  //   // Verificar si el usuario ya tiene un carrito
-  //   let cart = await this.shoppingCartRepository.findOne({ 
-  //     where: { user: { id: userId } }, 
-  //     relations: ['products', 'discounts'] 
-  //   });
-
-  //   if (cart) {
-  //     // Si el carrito ya existe, lo retornamos
-  //     return { cart, message: "Carrito ya existente para el usuario" };
-  //   }
-
-  //   // Si el carrito no existe, creamos uno nuevo
-  //   cart = new ShoppingCart();
-  //   cart.date_created = date_created;
-  //   cart.user = await this.userRepository.findOne({ where: { id: userId } });
-  //   cart.products = await this.productRepository.findBy({ id: In(products) });
-
-  //   if (discounts) {
-  //     cart.discounts = await this.discountRepository.findBy({ id: In(discounts) });
-  //   } else {
-  //     cart.discounts = [];
-  //   }
-  
-  //   const newCart = await this.shoppingCartRepository.save(cart);
-
-  //   return {
-  //     cart: newCart,
-  //     message: "Carrito creado exitosamente",
-  // };
-
-  //===================================================================  
-    
-    // const shoppingCart = new ShoppingCart();
-    // shoppingCart.asset = asset;
-    // shoppingCart.date_created = date_created;
-    // shoppingCart.products = await this.productRepository.findBy({ id: In(products) }); // Obtener múltiples productos
-    // shoppingCart.user = await this.userRepository.findOne({ where: { id: userId } }); 
-    
-    // if (discounts) {
-    //   shoppingCart.discounts = await this.discountRepository.findBy({ id: In(discounts) });
-    // } else {
-    //   shoppingCart.discounts = [];
-    // }
-
-    // return this.shoppingCartRepository.save(shoppingCart);
-    // return 'This action adds a new shoppingscart';
-  
-
   async findByUserServ(userId: number): Promise<ShoppingCart[]> {
     console.log('User ID in Service:', userId);  // Para verificar que userId esté bien
 
